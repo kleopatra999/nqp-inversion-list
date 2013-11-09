@@ -84,4 +84,10 @@ class InversionList {
         self.complement.merge($other.complement).invert;
     }
 
+    method new(:@codepoints?) {
+        my $new := self.CREATE();
+        nqp::bindattr($new, InversionList, '@!codepoints',
+            nqp::isnull(@codepoints) ?? nqp::list() !! @codepoints);
+        $new;
+    }
 }
