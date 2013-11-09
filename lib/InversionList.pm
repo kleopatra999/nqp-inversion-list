@@ -1,6 +1,6 @@
 # Unicode codepoints only go to 0x10FFFF, so anyhting larger
 # than that is basically infinity.
-my int $inf := 0x11000;
+my int $inf := 0x110000;
 
 class InversionList {
     has @!codepoints;
