@@ -1,6 +1,6 @@
 use InversionList;
 
-plan(25);
+plan(31);
 
 {
     my $il := InversionList.new();
@@ -36,7 +36,56 @@ plan(25);
     ok(!$il.contains(15), 'does not contain 15');
     ok(!$il.contains(20), 'does not contain 20');
     ok( $il.contains(21), 'contains 21');
+}
 
+{
+    my $il := InversionList.new();
+    $il.add_range(5, 10);
+    $il.add_range(15, 20);
+    my @cp1 := $il.copy._il;
+
+    say('# IL before double inversion ', nqp::join(', ', $il._il));
+    $il := $il.invert;
+    $il := $il.invert;
+    say('# IL after double inversion  ', nqp::join(', ', $il._il));
+
+    ok(nqp::elems($il._il) == nqp::elems(@cp1), "inverting twice keeps number of elements");
+    my $succ := 1;
+    for $il._il {
+        $succ := $succ && ($_ == nqp::shift(@cp1));
+    }
+    ok($succ, "elements are the same as before");
+}
+
+{
+    my $il := InversionList.new();
+    $il.add_range(5, 10);
+    $il.add_range(15, 20);
+    my @cp1 := $il.copy._il;
+    my $la := InversionList.new();
+    my $lb := InversionList.new();
+    $la.add_range(5, 10);
+    $lb.add_range(15, 20);
+    my $union := $la.union($lb);
+    my $union2 := $lb.union($la);
+    
+    ok(nqp::elems($union._il) == nqp::elems(@cp1), "union and separate merging of ranges has same amount of elems");
+    
+    say('# original        ', nqp::join(', ', $il._il));
+    say('# forwards union  ', nqp::join(', ', $union._il));
+    say('# backwards union ', nqp::join(', ', $union2._il));
+
+    my $succ := 1;
+    my $same := 1;
+    my @union2 := $union2._il;
+    for $union._il() {
+        $succ := $succ && ($_ == nqp::shift(@cp1));
+        $same := $same && ($_ == nqp::shift(@union2));
+    }
+    ok($succ, "elements are the same as before");
+    ok($same, "elements are the same between unions");
+
+    ok(nqp::elems($union2._il) == nqp::elems($union._il), "order of union operation doesn't matter for amount of elems");
 }
 
 {
