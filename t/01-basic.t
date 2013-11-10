@@ -1,6 +1,6 @@
 use InversionList;
 
-plan(15);
+plan(19);
 
 {
     my $il := InversionList.new();
@@ -23,4 +23,19 @@ plan(15);
     ok( $il.contains(9), 'extended contains 9');
     ok( $il.contains(10), 'extended contains 10');
     ok(!$il.contains(21), 'extended does not contain 21');
+}
+
+{
+    my $left := InversionList.new();
+    $left.add_range(5, 15);
+    my $right := InversionList.new();
+    $right.add_range(10, 20);
+    my $il := $left.intersection($right);
+    say('# left after intersection         ', nqp::join(', ', $left._il));
+    say('# intersection after intersection ', nqp::join(', ', $il._il));
+    say('# right after intersection        ', nqp::join(', ', $right._il));
+    ok(!$il.contains(5),  "intersection doesn't contain 5");
+    ok( $il.contains(10), "intersection contains 10");
+    ok( $il.contains(15), "intersection contains 15");
+    ok(!$il.contains(20), "intersection doesn't contain 20");
 }
