@@ -53,7 +53,11 @@ class InversionList {
     }
 
     method copy() {
-        InversionList.new(:@!codepoints);
+        my @codes_copy := nqp::list();
+        for @!codepoints {
+            @codes_copy.push($_);
+        }
+        InversionList.new(:codepoints(@codes_copy));
     }
 
     method add_range(int $from, int $to) {
