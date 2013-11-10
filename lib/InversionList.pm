@@ -57,9 +57,13 @@ class InversionList {
     }
 
     method add_range(int $from, int $to) {
+        self.add_range_excl($from, $to + 1);
+    }
+
+    method add_range_excl(int $from, int $to_excl) {
         my int $fpos := self._find_pos($from);
-        my int $tpos := self._find_pos($to + 1, $fpos);
-        nqp::splice(@!codepoints, [$from, $to], $fpos, $tpos - $fpos);
+        my int $tpos := self._find_pos($to_excl + 1, $fpos);
+        nqp::splice(@!codepoints, [$from, $to_excl], $fpos, $tpos - $fpos);
     }
 
     method merge(InversionList $other) {
@@ -67,7 +71,7 @@ class InversionList {
         my int $elems := nqp::elems(@other);
         my int $i := 0;
         while $i < $elems {
-            self.add_range(@other[$i], @other[$i + 1]);
+            self.add_range_excl(@other[$i], @other[$i + 1]);
             $i := $i + 2;
         }
     }
@@ -89,5 +93,8 @@ class InversionList {
         nqp::bindattr($new, InversionList, '@!codepoints',
             nqp::isnull(@codepoints) ?? nqp::list() !! @codepoints);
         $new;
+    }
+    method contains(int $codepoint) {
+        1 +& self._find_pos($codepoint + 1);
     }
 }
