@@ -1,6 +1,6 @@
 use InversionList;
 
-plan(31);
+plan(33);
 
 {
     my $il := InversionList.new();
@@ -101,4 +101,25 @@ plan(31);
     ok( $il.contains(10), "intersection contains 10");
     ok( $il.contains(15), "intersection contains 15");
     ok(!$il.contains(20), "intersection doesn't contain 20");
+}
+
+{
+    my $la := InversionList.new();
+    $la.add_range(10, 15);
+    $la.add_range(15, 20);
+    my @cpa := $la._il();
+
+    my $lb := InversionList.new();
+    $lb.add_range(10, 20);
+    my @cpb := $lb._il();
+
+    say('# one range  ', nqp::join(', ', @cpa));
+    say('# two ranges ', nqp::join(', ', @cpb));
+    ok(nqp::elems(@cpa) == nqp::elems(@cpb), "10-15 & 15-20 gives same number of elements as 10-20");
+
+    my $succ := 1;
+    for @cpa {
+        $succ := $succ && ($_ == nqp::shift(@cpb));
+    }
+    ok($succ, "10-15 & 15-20 gives same elements as 10-20");
 }
