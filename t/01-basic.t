@@ -17,7 +17,7 @@ plan(15);
     ok(!$il.contains(21), 'does not contain 21');
 
     $il.add_range(8, 10);
-    say('# IL after second add_range', nqp::join(', ', $il._il));
+    say('# IL after second add_range ', nqp::join(', ', $il._il));
     ok(!$il.contains(7), 'extended does not contain 7');
     ok( $il.contains(8), 'extended contains 8');
     ok( $il.contains(9), 'extended contains 9');
