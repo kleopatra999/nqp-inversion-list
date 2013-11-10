@@ -77,7 +77,7 @@ plan(31);
 
     my $succ := 1;
     my $same := 1;
-    my @union2 := $union2._il;
+    my @union2 := $union2.copy._il;
     for $union._il() {
         $succ := $succ && ($_ == nqp::shift(@cp1));
         $same := $same && ($_ == nqp::shift(@union2));
