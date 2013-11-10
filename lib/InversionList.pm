@@ -75,7 +75,7 @@ class InversionList {
         my int $elems := nqp::elems(@other);
         my int $i := 0;
         while $i < $elems {
-            self.add_range(@other[$i], @other[$i + 1]);
+            self.add_range(@other[$i], @other[$i + 1] - 1);
             $i := $i + 2;
         }
         self;
