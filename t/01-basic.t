@@ -1,6 +1,6 @@
 use InversionList;
 
-plan(19);
+plan(25);
 
 {
     my $il := InversionList.new();
@@ -23,6 +23,20 @@ plan(19);
     ok( $il.contains(9), 'extended contains 9');
     ok( $il.contains(10), 'extended contains 10');
     ok(!$il.contains(21), 'extended does not contain 21');
+}
+
+{
+    my $il := InversionList.new();
+    $il.add_range(10, 20);
+    $il := $il.invert;
+    say('# IL after inversion ', nqp::join(', ', $il._il));
+    ok( $il.contains(0), 'contains 0');
+    ok( $il.contains(9), 'contains 9');
+    ok(!$il.contains(10), 'does not contain 10');
+    ok(!$il.contains(15), 'does not contain 15');
+    ok(!$il.contains(20), 'does not contain 20');
+    ok( $il.contains(21), 'contains 21');
+
 }
 
 {
