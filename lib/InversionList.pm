@@ -50,6 +50,7 @@ class InversionList {
         else {
             @!codepoints := [0, $inf];
         }
+        self;
     }
 
     method copy() {
@@ -77,6 +78,7 @@ class InversionList {
             self.add_range(@other[$i], @other[$i + 1]);
             $i := $i + 2;
         }
+        self;
     }
 
     method union(InversionList $other) {
